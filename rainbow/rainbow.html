@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>rainbow</title>
+	<style type="text/css">
+		*{padding: 0;margin: 0; list-style: none;}
+		div{margin: 0 auto;}
+		.first{margin-left: 150px;}
+		ul{width: 300px;border: solid 2px #dfdfdf; margin: 15px; float: left; padding: 10px;}
+		ul li{margin: 5px;}
+	</style>
+	<script type="text/javascript">
+		//随机函数
+		function rnd(n,m){
+			return parseInt(Math.random()*(m-n))+n;
+		}
+		//创建元素函数
+		function createLi(){
+			var oLi=document.createElement('li');
+			oLi.style.height=rnd(70,200)+'px';
+			oLi.style.background='rgb('+rnd(1,256)+','+rnd(1,256)+','+rnd(1,256)+')';
+			return oLi ;
+		}
+		//随机创建20个li元素 ul.height最小优先放入规则
+		function createTwentyLi(){
+				var oUl=document.getElementsByTagName('ul');
+				for(i=0;i<20;i++){
+					var oLi=createLi();
+					var h0=oUl[0].offsetHeight;
+					var h1=oUl[1].offsetHeight;
+					var h2=oUl[2].offsetHeight;
+					var minH=null;
+					if(h0<h1){
+						if(h0<h2){
+							minH=oUl[0];
+						}
+						else{
+							minH=oUl[2];
+						}
+					}
+					else{
+						if (h1<h2) {
+							minH=oUl[1];
+						}
+						else{
+							minH=oUl[2];
+						}
+					}
+					minH.appendChild(oLi);
+				}
+			}
+		window.onload=function(){
+			createTwentyLi();
+			window.onscroll=function(){
+				var scrollTop=document.documentElement.scrollTop||document.body.scrollTop;
+				var clientH=document.documentElement.clientHeight;
+				var bottomePos=scrollTop+clientH;
+				if(bottomePos>=document.body.scrollHeight-30){
+					createTwentyLi();
+				}
+			}
+		}
+	</script>
+</head>
+<body>
+	<ul class="first"></ul>
+	<ul></ul>
+	<ul></ul>
+</body>
+</html>

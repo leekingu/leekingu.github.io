@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ppt</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        #box{
+            width: 400px;
+            height: 300px;
+            margin: 200px auto;
+            position: relative;
+            overflow: hidden;
+        }
+        #ul1{
+            width: 1600px;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        #ul1 li{
+            width: 400px;
+            height: 300px;
+            float: left;
+            font-size: 100px;
+            line-height: 300px;
+            text-align: center;
+            color: #fff;
+        }
+        #ol1{
+            position: absolute;
+            left: 0;
+            bottom: 0;
+        }
+        #ol1 li{
+            width: 80px;
+            height: 20px;
+            background: #ccc;
+            float: left;
+            margin: 10px;
+            position: relative;
+        }
+        #ol1 span{
+            width: 0%;
+            height: 100%;
+            background: #4058ff;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+    </style>
+    <script src="move.js"></script>
+    <script>
+        window.onload = function () {
+            var oBox=document.getElementById('box');
+            var oUl=document.getElementById('ul1');
+            var oOl=document.getElementById('ol1');
+            var aLi=oUl.children;
+            var aSpan=oOl.getElementsByTagName('span');
+
+            var width=aLi[0].offsetWidth;
+            var iNow=0;
+            function next(){
+                move(aSpan[iNow%aLi.length], {width: 80}, {complete: function(){
+                    iNow++;
+                    move(oUl, {left: -width*(iNow%aLi.length)}, {complete: function(){
+                        for(var i=0; i<aSpan.length; i++){
+                            aSpan[i].style.width=0;
+                        }
+                        next();
+                    }});
+                }});
+            }
+            next();
+        };
+    </script>
+</head>
+<body>
+    <div id="box">
+        <ul id="ul1">
+            <li style="background: #2acfff;">1</li>
+            <li style="background: #cc66cc;">2</li>
+            <li style="background: #ff9be5;">3</li>
+            <li style="background: #ffe253;">4</li>
+        </ul>
+        <ol id="ol1">
+            <li><span></span></li>
+            <li><span></span></li>
+            <li><span></span></li>
+            <li><span></span></li>
+        </ol>
+    </div>
+</body>
+</html>

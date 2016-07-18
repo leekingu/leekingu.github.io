@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>magnifier</title>
+	<style type="text/css">
+		*{margin: 0;padding: 0;}
+		#img{width:453px; height: 270px;}
+		#normal{margin:150px 30px 0 200px; float:left; width:453px; height: 270px; border: solid 2px #dfdfdf; position: relative;}
+		#normal span{width: 150px; height: 100px; background: white; position: absolute;
+			 opacity: 0.4; filter: alpha(opacity=40); display: none;}
+		#tobig{margin:150px 0 0 0; float:left; width:300px; height: 200px; overflow: hidden; display: none;position: relative;}
+		#img2{position: absolute;left: 0;top: 0;}
+
+	</style>
+	<script type="text/javascript">
+		function getPos(obj){
+				var l=0;
+				var t=0;
+			while(obj){
+				l+=obj.offsetLeft ;
+				t+=obj.offsetTop ;
+				obj=obj.offsetParent ;
+			}
+			return {left:l,top:t} 
+		}
+		window.onload=function(){
+			var oNormal=document.getElementById('normal');
+			var oTobig=document.getElementById('tobig');
+			var oSpan=oNormal.children[1];
+			var oImg=oTobig.children[0];
+			oNormal.onmouseenter=function(){
+				oSpan.style.display='block';
+				oTobig.style.display='block';
+			}
+			oNormal.onmouseleave=function(){
+				oSpan.style.display='none';
+				oTobig.style.display='none';
+			}
+			oNormal.onmousemove=function(ev){
+				var oEvent= ev || event ;
+				var scrollTop=document.documentElement.scrollTop||document.body.scrollTop;
+				var scrollLeft=document.documentElement.scrollLeft || document.body.scrollLeft;
+				var l=scrollLeft+oEvent.clientX-getPos(oNormal).left-oSpan.offsetWidth/2 ;
+				var t=scrollTop+oEvent.clientY-getPos(oNormal).top-oSpan.offsetHeight/2 ;
+				//alert(scrollLeft);
+				if(l<0){
+					l=0 ;
+				}
+				if (t<0){
+					t=0 ;
+				} 
+				if(l>=oNormal.offsetWidth-oSpan.offsetWidth){
+					l=oNormal.offsetWidth-oSpan.offsetWidth ;
+				}
+				if(t>=oNormal.offsetHeight-oSpan.offsetHeight){
+					t=oNormal.offsetHeight-oSpan.offsetHeight ;
+				}
+				oSpan.style.left=l+'px';
+				oSpan.style.top= t+'px';
+				var t2=-t/(oNormal.offsetHeight-oSpan.offsetHeight)*(oImg.offsetHeight-oTobig.offsetHeight);
+				var l2=-l/(oNormal.offsetWidth-oSpan.offsetWidth)*(oImg.offsetWidth-oTobig.offsetWidth);
+				oImg.style.left=l2+'px';
+				oImg.style.top=t2+'px';
+			}
+		}
+	</script>
+</head>
+<body>
+	<div id="normal">
+		<img src="image/2.jpg" id="img">
+		<span></span>
+	</div>
+	<div id="tobig">
+		<img src="image/2.jpg" id="img2">
+	</div>
+</body>
+</html>

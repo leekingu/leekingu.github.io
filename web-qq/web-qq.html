@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>webqq</title>
+	<link rel="stylesheet" type="text/css" href="css/base.css">
+	<style type="text/css">
+		*{padding: 0;margin: 0;}
+		.box{width: 600px;height: 600px;margin: 20px auto;position: relative;overflow: hidden;}
+		.main{width: 1200px;height: 600px;position: absolute;}
+		.login_regs{width: 600px;height: 600px; background: #f7f7f7;float: left;}
+		.content{width: 600px;height: 600px;background: #f7f7f7;float: left;}
+		.list{width: 100px;height: 600px;background: #dfdfdf;float: left;overflow-y: scroll;overflow-x: hidden;}
+		.active{height: 18px;margin:3px;display: inline-block;}
+
+		.message{width: 500px;height: 600px;float: left;}
+		.messagebox{width: 500px;height: 500px;background: #dfdfdf;overflow: hidden;overflow-y: scroll}
+		.emessage{width: 482px;background: #f7f7f7;margin:5px;padding: 4px;}
+		.number{width: 460px;text-align: right;padding-right: 30px;margin-bottom: 3px;}
+		.emessagecontent{width: 450px;padding-left: 20px;}
+		.textarea{width: 498px;height: 95px;resize: none;}
+		.webqq{text-align: center;margin-bottom: 15px; padding-top: 180px;}
+		.webqq h1{font-weight: bold; font-size: 18px;}
+		.face{width: 70px; height: 70px;border:solid 1px #dfdfdf;margin-left: 265px; margin-bottom: 15px;position: relative;overflow: hidden;}
+		.face ul{width: 630px; height: 70px;position: absolute;left: 0;top: 0;}
+		.face img{width: 70px;}
+		.face li{float: left;}
+		.inputbox{margin-bottom: 10px;text-align: center;}
+		.inputbox div{position: relative;display: inline-block;}
+		.inputbox span{position: absolute;left: 2px;top: 1px; color:#D1D1D1 }
+		.inputbox input{display: inline-block;}	
+		.login{text-align: center;}
+		.end{position: relative;}
+		.send{position: absolute;right: 30px;bottom:5px;}
+		.quit{position: absolute;right: 0px;bottom:5px;}
+		
+	</style>
+	<script src="move.js"></script>
+	<script src="jsonp.js"></script>
+	<script type="text/javascript">
+		function toDouble(n){
+	        if(n<10){
+	            return '0'+n
+	        }else{
+	            return n
+	        }
+    	}; 
+    	function tim(nowTime){
+			console.log(nowTime);
+			var oDate=new Date();
+			oDate.setTime(nowTime*1000);
+			sDate=oDate.getFullYear()+'-'+toDouble(oDate.getMonth()+1)+'-'+toDouble(oDate.getDate())+'-'+toDouble(oDate.getHours())+':'+toDouble(oDate.getMinutes())+':'+toDouble(oDate.getSeconds());
+			return sDate;
+		};  
+		window.onload=function(){
+			var oDiv=document.getElementById('div');
+			var oMain=document.getElementById('main');
+			var oFace=document.getElementById('face');
+			var oUl=document.getElementById('ul');
+			var oImg=oUl.getElementsByTagName('img');
+			var oAccount_box=document.getElementById('account_box');
+			var oPassword_box=document.getElementById('password_box');
+			var oReg=document.getElementById('reg');
+			var oLogin=document.getElementById('login');
+			var oAccount=document.getElementById('account');
+			var oPassword=document.getElementById('password');
+			var oUserList=document.getElementById('userlist');
+			var oMessagebox=document.getElementById('messagebox');
+			var oT=document.getElementById('textarea');
+			var oSend=document.getElementById('send');
+			var oQuit=document.getElementById('quit');
+			var timer1;
+			var timer;
+			var num=1;
+			var iMsg=0;
+			var flag=true;
+			var URL='http://zhinengshe.com/exercise/im/api.php';
+			oFace.onclick=function(){
+				if(!flag)return;
+				flag=false;	
+				if (num==8) {
+					move(oUl, {left: -560},{duration:180,complete: function(){oUl.style.left=0+'px';flag=true;}});
+					num=1;
+				}else{
+					move(oUl, {left: -num*70},{duration:180,complete: function(){flag=true;}});
+					num++;
+				}
+			};
+			(function(){
+				var oInput=oAccount_box.getElementsByTagName('input')[0];
+				var oSpan=oAccount_box.getElementsByTagName('span')[0];
+				oInput.onfocus=function(){
+					oSpan.style.display='none';
+				}
+				oInput.onblur=function(){
+					if(oInput.value==''){
+					oSpan.style.display='block';
+					}
+				}
+				oSpan.onclick=function(){
+					oInput.focus();
+				}	
+			})();
+			(function(){
+				var oInput=oPassword_box.getElementsByTagName('input')[0];
+				var oSpan=oPassword_box.getElementsByTagName('span')[0];
+				oInput.onfocus=function(){
+					oSpan.style.display='none';
+				}
+				oInput.onblur=function(){
+					if(oInput.value==''){
+					oSpan.style.display='block';
+					}
+				}
+				oSpan.onclick=function(){
+					oInput.focus();
+				}	
+			})();
+			oReg.onclick=function(){
+				jsonp({
+                    url: URL,
+                    data: {
+                        a: 'reg',
+                        user: oAccount.value,
+                        pass: oPassword.value,
+                        face: num
+                    },
+                    success: function(json){
+                        if(json.err){
+                            alert(json.msg);
+                        }else{
+                            alert(json.msg);
+                        }
+                    }
+                })	
+			}
+			oLogin.onclick=function(){
+				oMessagebox.innerHTML='';
+                oUserList.innerHTML=';'
+				jsonp({
+                    url: URL,
+                    data: {
+                        a: 'lgn',
+                        user: oAccount.value,
+                        pass: oPassword.value
+                    },
+                    success: function(json){
+                    	if(json.err){
+                            alert(json.msg);
+                        }else{
+                            getUserList(json.token);
+                            getAllMsg(json.token);
+                            sendMsg(json.token);
+                            logout(json.token);
+                            timer=setTimeout(function(){
+                            	move(oMain,{left:-600},{duration:800})
+                            },500)
+                            timer1=setInterval(function(){
+                                getNewMsg(json.token);
+                            }, 5000);
+                            
+                       	}
+                    }
+                });
+			}
+			function getUserList(token){
+                jsonp({
+                    url: URL,
+                    data: {
+                        a: 'get_user_list',
+                        token: token
+                    },
+                    success: function(json){
+                        if(json.err){
+                            alert('获取用户列表失败');
+                        }else{
+                            var arr=json.data;
+                            for(var i=0; i<arr.length; i++){
+             					if(!(arr[i].face<9&&arr[i].face>0)){
+             						arr[i].face=2
+             					}
+                                var oLi=document.createElement('li');
+                                // alert(arr[i].username)
+                                oLi.innerHTML='<img src="images/'+arr[i].face+'.jpg" class="active"><span class="active">'+arr[i].username+'</span>'
+                                oUserList.appendChild(oLi);
+                            }
+                        }
+                    }
+                });
+            }
+            function getAllMsg(token){
+                jsonp({
+                    url: URL,
+                    data: {
+                        a: 'get_msg',
+                        token: token
+                    },
+                    success: function(json){
+                        if(json.err){
+                            alert('获取留言失败');
+                        }else{
+                            var arr=json.data;
+                            for(var i=0; i<arr.length; i++){
+                            	var nowTime=arr[i].post_time;
+                            	tim(nowTime);	
+                                var oLi=document.createElement('li');
+                                oLi.className='emessage';
+                                oLi.innerHTML='<p class="number">'+arr[i].username+'--'+sDate+'</p><p class="emessagecontent">'+arr[i].content+'</p>'
+                                oMessagebox.appendChild(oLi);
+                                oMessagebox.scrollTop=oMessagebox.scrollHeight;
+                                // 更新ID
+                                if(iMsg<arr[i].ID){
+                                    iMsg=arr[i].ID;
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            function sendMsg(token){
+                oSend.onclick=function(){
+                    jsonp({
+                        url: URL,
+                        data: {
+                            a: 'snd_msg',
+                            content: oT.value,
+                            token: token
+                        },
+                        success: function(json){
+                            if(json.err){
+                                alert('留言失败');
+                            }else{
+                                var oLi=document.createElement('li');
+                                console.log(json.time)
+                                tim(json.time);
+                                oLi.className='emessage';
+                                oLi.innerHTML='<p class="number">'+oAccount.value+'--'+sDate+'</p><p class="emessagecontent">'+oT.value+'</p>'
+                                oMessagebox.appendChild(oLi);
+                                oMessagebox.scrollTop=oMessagebox.scrollHeight;
+                                oT.value='';
+                                // 更新ID
+                                if(iMsg<json.ID){
+                                    iMsg=json.ID;
+                                }
+                            }
+                        }
+                    });
+                };
+            }
+             function logout(token){
+                oQuit.onclick=function(){
+                    jsonp({
+                        url: URL,
+                        data: {
+                            a: 'logout',
+                            token: token
+                        }
+                    })
+                    //     success: function(json){
+                    //         if(json.err){
+                    //             // alert('退出登录失败');
+                    //         }else{
+                    //         	oMessagebox.innerHTML='';
+                    //         	oUserList.innerHTML=';'
+                    //             // alert(json.msg);
+                    //             clearInterval(timer1);
+                    //             move(oMain,{left:0},{duration:1000})
+                    //         }
+                    //     }
+                    // });
+                    clearInterval(timer1);
+                    move(oMain,{left:0},{duration:1000})
+                };
+            }
+            function getNewMsg(token){
+                jsonp({
+                    url: URL,
+                    data: {
+                        a: 'get_msg_n',
+                        token: token,
+                        n: iMsg
+                    },
+                    success: function(json){
+                        if(json.err){
+                            alert('实时获取消息失败');
+                        }else{
+                            var arr=json.data;
+                            for(var i=0; i<arr.length; i++){
+                            	var nowTime=arr[i].post_time;
+                            	tim(nowTime);	
+                                var oLi=document.createElement('li');
+                                oLi.className='emessage';
+                                oLi.innerHTML='<p class="number">'+arr[i].username+'--'+sDate+'</p><p class="emessagecontent">'+arr[i].content+'</p>'
+                                oMessagebox.appendChild(oLi);
+                                oMessagebox.scrollTop=oMessagebox.scrollHeight;
+                                // 更新ID
+                                if(iMsg<arr[i].ID){
+                                    iMsg=arr[i].ID;
+                                }
+                            }
+                        }
+                    }
+                })
+            }		
+		}
+	</script>
+</head>
+<body>
+	<div class="box">
+		<ul class="main"  id="main">
+			<li class="login_regs" id="div">
+				<div class="webqq">
+					<h1>WEB QQ</h1>				
+				</div>
+				<div class="face" id="face" >
+					<ul id="ul">
+						<li>
+							<img src="images/1.jpg" alt="">
+						</li>
+						<li>
+							<img src="images/2.jpg" alt="">
+						</li>
+						<li>
+							<img src="images/3.jpg" alt="">
+						</li>
+						<li>
+							<img src="images/4.jpg" alt="">
+						</li>
+						<li>
+							<img src="images/5.jpg" alt="">
+						</li>
+						<li>
+							<img src="images/6.jpg" alt="">
+						</li>
+						<li>
+							<img src="images/7.jpg" alt="">
+						</li>
+						<li>
+							<img src="images/8.jpg" alt="">
+						</li>
+						<li>
+							<img src="images/1.jpg" alt="">
+						</li>
+					</ul>
+				</div>
+				<div>
+					<div class="inputbox">
+						<div id="account_box">
+							<span>用户名</span>
+							<input type="text" id="account">
+						</div>	
+					</div>
+					<div class="inputbox">
+						<div id="password_box">
+							<span>密码</span>
+							<input type="password" id="password">
+						</div>
+					</div>
+				</div>
+				<div class="login">	
+					<a  id="reg">注册</a>
+					<a  id="login">登录</a>	
+				</div>
+			</li>
+			<li class="content" id="content">
+				<div class="list">
+					<ul id="userlist">
+						<li>
+							<!-- <img src="images/1.jpg" class="active">
+							<span class="active">hahah</span> -->
+						</li>
+					</ul>
+				</div>
+				<div class="message">
+					<ul id="messagebox" class="messagebox">
+						<!-- <li class="emessage">
+							<p class="number">asdasda</p>
+							<p class="emessagecontent"></p>	
+						</li> -->
+					</ul>
+					<div class="end">
+						<textarea class="textarea" id="textarea">
+						</textarea>
+						<input type="button" value="发表" id="send" class="send">
+						<input type="button" value="退出" id="quit" class="quit">
+					</div>
+				</div>	
+			</li>
+		</ul>
+	</div>
+</body>
+</html>
