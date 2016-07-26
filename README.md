@@ -12,7 +12,7 @@
  - 李靖宇/男/1990 
  - 本科/郑州大学 电子信息工程 
  - 工作年限：2
- - 作品展示页：http://github.com/leekingu 
+ - 作品展示页：https://leekingu.github.io 
  - 期望职位：Web前端程序员
  - 期望薪资：税前月薪13k~15k
  - 期望城市：北京
