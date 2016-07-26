@@ -48,7 +48,6 @@
 		.box{
 				width: 100%;
 				height: 100%;
-				background: url(image/2.jpg) no-repeat center center fixed;
 				background-size: cover;
 			}
 		.box .onepage{
@@ -167,6 +166,9 @@
 	<script src="move.js"></script>
 	<script type="text/javascript">
 		$(function(){
+			$('.box').css({
+				background:'url(image/2.jpg) no-repeat center center fixed'
+			})
 			$('.zp').click(function(){
 				 $('body,html').stop().animate({scrollTop: $(window).height()-2 },700);
         			return false;
@@ -424,9 +426,6 @@
 			<a href="javascript:;">
 				<li class="gyw">About Me</li>
 			</a>
-		<!-- 	<li class="zp">HTML&CSS</li>
-			<li class="xm">JS&CSS3+H5</li>
-			<li class="gyw">About Me</li> -->
 			<li class="actb"></li>
 		</ul>
 	</div>
