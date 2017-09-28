@@ -67,10 +67,6 @@ header .nav-wrap {
   padding: 7px 55px 7px 0;
 }
 header .nav {
-  float: right;
-  height: 40px;
-}
-header .nav-left {
   float: left;
   height: 40px;
 }
