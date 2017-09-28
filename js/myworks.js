@@ -633,9 +633,5 @@ document.addEventListener("DOMContentLoaded", function() {
 				}
 			}, 30)
 		};
-		var oTT = document.querySelector(".toptop");
-		oTT.onclick = function() {
-			document.documentElement.scrollTop = document.body.scrollTop = 0
-		}
 	})()
 }, false);
