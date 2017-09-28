@@ -2,7 +2,6 @@
 document.addEventListener("DOMContentLoaded", function() {
 	var oHd = document.querySelector("header");
 	var oSimShow = document.querySelector(".sim-show");
-	var oMe = document.querySelector(".me");
 	var oSha = oMe.querySelector(".shadow");
 	var oOther = document.querySelector(".others");
 	var oFace = document.querySelector(".face");
