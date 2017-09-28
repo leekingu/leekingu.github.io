@@ -1,15 +1,10 @@
 "use strict";
 document.addEventListener("DOMContentLoaded", function() {
 	var oHd = document.querySelector("header");
-	var oSimShow = document.querySelector(".sim-show");
-	var oOther = document.querySelector(".others");
 	var oFace = document.querySelector(".face");
 	oHd.style.width = document.documentElement.clientWidth + "px";
 	oHd.style.height = document.documentElement.clientHeight + "px";
 	oHd.style.backgroundSize = document.documentElement.clientWidth + "px auto";
-	oOther.style.width = document.documentElement.clientWidth + "px";
-	oOther.style.height = document.documentElement.clientHeight + "px";
-	oOther.style.backgroundSize = document.documentElement.clientWidth + "px auto";
 	window.onresize = window.onscroll = function() {
 		var oHd = document.querySelector("header");
 		var oSimShow = document.querySelector(".sim-show");
